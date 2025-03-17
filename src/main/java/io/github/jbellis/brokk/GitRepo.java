@@ -12,6 +12,8 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 
+import io.github.jbellis.brokk.git.GitIgnore;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
@@ -63,6 +65,12 @@ public class GitRepo implements Closeable, IGitRepo {
             git = new Git(repository);
         } catch (IOException e) {
             throw new UncheckedIOException("Failed to open repository", e);
+        }
+
+        try{
+            GitIgnore.setRulesIgnoreConfigFiles(root);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot create, read or write .gitignore file", e);
         }
     }
 
